@@ -9,6 +9,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -24,13 +25,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank
+     * @Assert\Email(message = "The email '{{ value }}' is not a valid email.")
      */
     private $email;
 
     /**
      * @ORM\Column(type="json")
      */
-    private $roles = [];
+    private $roles = ["ROLE_USER"];
 
     /**
      * @var string The hashed password
@@ -40,23 +43,52 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $lastname;
 
     /**
-     * @ORM\OneToMany(targetEntity=Place::class, mappedBy="user")
+     * @ORM\Column(type="string", nullable=true, length=255)
+     */
+    private $ville;
+
+    /**
+     * @ORM\Column(type="string", nullable=true, length=255)
+     */
+    private $adresse;
+
+    /**
+     * @ORM\Column(type="string", nullable=true, length=255)
+     */
+    private $telephone;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default" : false})
+     */
+    private $Valide;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Produit::class, mappedBy="user")
      * @Groups({"guser"})
      */
-    private $places;
+    private $produits;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Reservation::class, mappedBy="user")
+     * @Groups({"guser"})
+     */
+    private $reservations;
 
     public function __construct()
     {
-        $this->places = new ArrayCollection();
+        $this->produits = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -172,30 +204,108 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection|Place[]
-     */
-    public function getPlaces(): Collection
+    public function getVille(): ?string
     {
-        return $this->places;
+        return $this->ville;
     }
 
-    public function addPlace(Place $place): self
+    public function setVille(string $ville): self
     {
-        if (!$this->places->contains($place)) {
-            $this->places[] = $place;
-            $place->setUser($this);
+        $this->ville = $ville;
+
+        return $this;
+    }
+
+    public function getAdresse(): ?string
+    {
+        return $this->adresse;
+    }
+
+    public function setAdresse(string $adresse): self
+    {
+        $this->adresse = $adresse;
+
+        return $this;
+    }
+
+    public function getTelephone(): ?string
+    {
+        return $this->telephone;
+    }
+
+    public function setTelephone(string $telephone): self
+    {
+        $this->telephone = $telephone;
+
+        return $this;
+    }
+
+    public function getValide(): ?bool
+    {
+        return $this->Valide;
+    }
+
+    public function setValide(?bool $Valide): self
+    {
+        $this->Valide = $Valide;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Produit[]
+     */
+    public function getProduits(): Collection
+    {
+        return $this->produits;
+    }
+
+    public function addProduit(Produit $produit): self
+    {
+        if (!$this->produits->contains($produit)) {
+            $this->produits[] = $produit;
+            $produit->setUser($this);
         }
 
         return $this;
     }
 
-    public function removePlace(Place $place): self
+    public function removeProduit(Produit $produit): self
     {
-        if ($this->places->removeElement($place)) {
+        if ($this->produits->removeElement($produit)) {
             // set the owning side to null (unless already changed)
-            if ($place->getUser() === $this) {
-                $place->setUser(null);
+            if ($produit->getUser() === $this) {
+                $produit->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Reservation[]
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): self
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations[] = $reservation;
+            $reservation->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): self
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getUser() === $this) {
+                $reservation->setUser(null);
             }
         }
 

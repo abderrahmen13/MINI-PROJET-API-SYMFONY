@@ -8,6 +8,9 @@ fos_rest:
 
     view:
         view_response_listener: true
+
+    body_converter:
+        enabled: true
     # …
             #    param_fetcher_listener:  true
 #    allowed_methods_listener:  true

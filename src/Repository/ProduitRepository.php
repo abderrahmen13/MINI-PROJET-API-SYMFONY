@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\Place;
+use App\Entity\Produit;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Place|null find($id, $lockMode = null, $lockVersion = null)
- * @method Place|null findOneBy(array $criteria, array $orderBy = null)
- * @method Place[]    findAll()
- * @method Place[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Produit|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Produit|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Produit[]    findAll()
+ * @method Produit[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class PlaceRepository extends ServiceEntityRepository
+class ProduitRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Place::class);
+        parent::__construct($registry, Produit::class);
     }
 
     // /**
-    //  * @return Place[] Returns an array of Place objects
+    //  * @return Produit[] Returns an array of Produit objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class PlaceRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Place
+    public function findOneBySomeField($value): ?Produit
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.exampleField = :val')

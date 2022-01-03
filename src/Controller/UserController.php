@@ -4,10 +4,14 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+/**
+ * @Route("/api", name="api_user_")
+ */
 class UserController extends AbstractController
 {
     /**
@@ -20,6 +24,22 @@ class UserController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/api/places/{id}",name="places_detail", requirements = {"id"="\d+"})
+     * @View()
+     */
+    public function getPlace($id,PlaceRepository $repo)
+    {
+        $place = $repo->find($id);
+        // transformer les objets en tableau  
+       
+        return $place;
+    }
+
+    /**
+     * @Route("/api/users",name="users_list")
+     * @View(statusCode=200,serializerGroups={"guser"})
+     */
     public function getUsers(UserRepository $repo)
     {
         $users = $repo->findAll();
