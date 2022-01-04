@@ -84,7 +84,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $Valide;
 
     /**
-     * @ORM\OneToMany(targetEntity=Produit::class, mappedBy="user")
+     * @ORM\OneToMany(targetEntity=Produit::class, indexBy="user", mappedBy="user",)
      * @Groups({"guser"})
      */
     private $produits;

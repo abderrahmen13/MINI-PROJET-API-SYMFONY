@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ReservationRepository::class)
@@ -17,6 +18,7 @@ class Reservation
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"guser"})
      */
     private $id;
 
@@ -36,6 +38,7 @@ class Reservation
      * @ORM\Column(type="date")
      * @Assert\NotBlank
      * @Assert\Date
+     * @Groups({"guser"})
      */
     private $date_reservation;
 

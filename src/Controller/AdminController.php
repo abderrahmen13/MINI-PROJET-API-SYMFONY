@@ -9,6 +9,9 @@ use FOS\RestBundle\Controller\Annotations\View;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
+use App\Entity\Categorie;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @Route("/api/admin", name="api_admin_")
@@ -33,6 +36,7 @@ class AdminController extends AbstractController
                 'adresse' => $producteur->getAdresse(),
                 'telephone' => $producteur->getTelephone(),
                 'valide' => $producteur->getValide(),
+                'produits' => $producteur->getProduits(),
             ];
         }
         return new JsonResponse($formatted);
@@ -52,6 +56,7 @@ class AdminController extends AbstractController
                 'firstName' => $consommateur->getFirstName(),
                 'lastName' => $consommateur->getLastName(),
                 'email' => $consommateur->getEmail(),
+                'reservations' => $consommateur->getReservations(),
             ];
         }
         return new JsonResponse($formatted);
@@ -69,5 +74,24 @@ class AdminController extends AbstractController
         $em->persist($producteur);
         $em->flush();
         return $serializer->serialize($producteur->getValide(), 'json', ['groups' => ['guser']]);
+    }
+
+    /**
+     * @Route("/categorie", name="add_categorie", methods={"POST"})
+     * @ParamConverter("categorie", converter="fos_rest.request_body")
+     */
+    public function add_categorie(Categorie $categorie, ValidatorInterface $validator): Response
+    {
+        $errors = $validator->validate($categorie);
+
+        if (count($errors)) {
+            return $this->json($errors, Response::HTTP_BAD_REQUEST);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($categorie);
+        $em->flush();
+
+        return $this->json($categorie, 200);
     }
 }

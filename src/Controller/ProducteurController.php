@@ -24,10 +24,10 @@ class ProducteurController extends AbstractController
      * @Route("/produits", name="produits", methods={"GET","HEAD"})
      * @View(statusCode=200,serializerGroups={"guser"})
      */
-    public function produits(ProduitRepository $repo)
+    public function produits(ProduitRepository $repo, SerializerInterface $serializer): Array
     {
         $produits = $repo->findBy(['user' => $this->getUser()]);
-        return $this->json($produits, 200);
+        return $produits;
     }
 
     /**
@@ -76,27 +76,16 @@ class ProducteurController extends AbstractController
 
     /**
      * @Route("/produit/{id}", name="delete_produit", methods={"DELETE"}, requirements = {"id"="\d+"})
-     * @ParamConverter("produit", converter="fos_rest.request_body")
      * @View(statusCode=200,serializerGroups={"guser"})
      */
-    public function delete_produit($id, Produit $produit, ProduitRepository $repo, SerializerInterface $serializer, ValidatorInterface $validator)
+    public function delete_produit($id, ProduitRepository $repo, SerializerInterface $serializer, ValidatorInterface $validator)
     {
-        $errors = $validator->validate($produit);
-
-        // if (count($errors)) {
-        //     return $this->json($errors, Response::HTTP_BAD_REQUEST);
-        // }
-
-        $newproduit = $repo->find($id);
-        $newproduit->setName($produit->getName());
-        $newproduit->setImage($produit->getImage());
-        $newproduit->setDateRecolte($produit->getDateRecolte());
-        $newproduit->setQuantite($produit->getQuantite());
+        $produit = $repo->find($id);
 
         $em = $this->getDoctrine()->getManager();
-        $em->persist($newproduit);
+        $em->remove($produit);
         $em->flush();
 
-        return $newproduit;
+        return $id;
     }
 }
