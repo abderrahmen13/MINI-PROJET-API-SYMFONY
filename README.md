@@ -1,5 +1,9 @@
 1. ADMIN :
     - POST      /api/admin/categorie                (ajouter une categorie)
+                EX:
+                {
+                    "name":"categorie5"
+                }
     - GET       /api/admin/consommateurs            (liste des consomateurs)
     - GET       /api/admin/producteurs              (liste des producteurs)
     - PUT       /api/admin/valide_producteur/{id}   (valider un producteur)
