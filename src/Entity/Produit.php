@@ -18,31 +18,35 @@ class Produit
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"guser"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
+     * @Groups({"guser"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
+     * @Groups({"guser"})
      */
     private $image;
 
     /**
      * @ORM\Column(type="date")
-     * @Assert\NotBlank
      * @Assert\Date
+     * @Groups({"guser"})
      */
     private $date_recolte;
 
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotBlank
+     * @Groups({"guser"})
      */
     private $quantite;
 

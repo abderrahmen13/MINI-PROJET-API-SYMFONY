@@ -20,6 +20,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"guser"})
      */
     private $id;
 
@@ -27,49 +28,58 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\NotBlank
      * @Assert\Email(message = "The email '{{ value }}' is not a valid email.")
+     * @Groups({"guser"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="json")
+     * @Groups({"guser"})
      */
     private $roles = ["ROLE_USER"];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Groups({"guser"})
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
+     * @Groups({"guser"})
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
+     * @Groups({"guser"})
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="string", nullable=true, length=255)
+     * @Groups({"guser"})
      */
     private $ville;
 
     /**
      * @ORM\Column(type="string", nullable=true, length=255)
+     * @Groups({"guser"})
      */
     private $adresse;
 
     /**
      * @ORM\Column(type="string", nullable=true, length=255)
+     * @Groups({"guser"})
      */
     private $telephone;
 
     /**
      * @ORM\Column(type="boolean", nullable=true, options={"default" : false})
+     * @Groups({"guser"})
      */
     private $Valide;
 
