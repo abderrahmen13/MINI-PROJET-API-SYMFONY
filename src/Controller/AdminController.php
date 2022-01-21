@@ -87,6 +87,7 @@ class AdminController extends AbstractController
         $formatted = [];
         foreach ($categories as $category) {
             $formatted[] = [
+                'id' => $category->getId(),
                 'name' => $category->getName(),
                 'produits' => $category->getProduits(),
             ];
