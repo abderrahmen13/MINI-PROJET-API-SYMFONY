@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\Annotations\View;
 use App\Repository\UserRepository;
+use App\Repository\CategorieRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use App\Entity\Categorie;
@@ -74,6 +75,23 @@ class AdminController extends AbstractController
         $em->persist($producteur);
         $em->flush();
         return $serializer->serialize($producteur->getValide(), 'json', ['groups' => ['guser']]);
+    }
+
+    /**
+     * @Route("/categories", name="category", methods={"GET","HEAD"})
+     */
+    public function categories(CategorieRepository $repo): Response
+    {
+        $categories = $repo->findAll();
+        // transformer les objets en tableau  
+        $formatted = [];
+        foreach ($categories as $category) {
+            $formatted[] = [
+                'name' => $category->getName(),
+                'produits' => $category->getProduits(),
+            ];
+        }
+        return new JsonResponse($formatted);
     }
 
     /**
